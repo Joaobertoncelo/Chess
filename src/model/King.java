@@ -5,64 +5,64 @@ import java.lang.ArrayIndexOutOfBoundsException;
 public class King extends Piece{
 	
 	//Construtor
-	public King(int cor){
-		super(cor);
+	public King(int pieceColor){
+		super(pieceColor);
 	}
     
 	public String toString() {
-		if(cor == 1) {
+		if(pieceColor == 1) {
 			return "White King";
 		}else {
 			return "Black King";
 		}
 	}
 	
-	public Boolean andar(int colunaIni, int linhaIni, int colunaFim, int linhaFim, Board tab) {	
+	public Boolean move(int initialColumn, int initialrow, int lastColumn, int lastrow, Board board) {	
 		try {
-			//Andar normal
-			if(this.conferePos(colunaFim, linhaFim)) {
-				Piece pec = tab.getPeca(linhaFim, colunaFim);
-				int linha = linhaFim - linhaIni;
-				int coluna = colunaFim - colunaIni;
-				if (pec == null||(this.cor != pec.cor)) {
-					if(Math.abs(linha) <= 1 && Math.abs(coluna) <=1) {
-							tab.setPeca(linhaFim, colunaFim, this);
-							tab.setPeca(linhaIni, colunaIni, null);
-							this.primMov = false;
+			//move normal
+			if(this.checkPosition(lastColumn, lastrow)) {
+				Piece pec = board.getPiece(lastrow, lastColumn);
+				int row = lastrow - initialrow;
+				int column = lastColumn - initialColumn;
+				if (pec == null||(this.pieceColor != pec.pieceColor)) {
+					if(Math.abs(row) <= 1 && Math.abs(column) <=1) {
+							board.setPiece(lastrow, lastColumn, this);
+							board.setPiece(initialrow, initialColumn, null);
+							this.firstMove = false;
 							return true;
 					}			
 				}
 				//roque
 				//confere se é o primeiro movimento
-				if ((this.primMov)) {
+				if ((this.firstMove)) {
 					Piece rook;
-					rook = tab.getPeca(linhaFim, colunaFim);
+					rook = board.getPiece(lastrow, lastColumn);
 					//confere se a peça no canto é torre
 					if(rook instanceof Rook) {
-						if(rook.cor == this.cor) {
+						if(rook.pieceColor == this.pieceColor) {
 							//confere se é o primeiro movimento da torre
-							if(rook.primMov) {
+							if(rook.firstMove) {
 								//direita vazia 
-								if(coluna>0 
-										&&(tab.getPeca(linhaIni,colunaIni+1) == null)
-										&&(tab.getPeca(linhaIni,colunaIni+2) == null)) {
+								if(column>0 
+										&&(board.getPiece(initialrow,initialColumn+1) == null)
+										&&(board.getPiece(initialrow,initialColumn+2) == null)) {
 									System.out.println(rook);
-									tab.setPeca(linhaIni, colunaIni+2, this);
-									tab.setPeca(linhaIni, colunaIni, null);
-									tab.setPeca(linhaIni, colunaIni+1, rook);
-									tab.setPeca(linhaFim, colunaFim, null);
-									this.primMov = false;
+									board.setPiece(initialrow, initialColumn+2, this);
+									board.setPiece(initialrow, initialColumn, null);
+									board.setPiece(initialrow, initialColumn+1, rook);
+									board.setPiece(lastrow, lastColumn, null);
+									this.firstMove = false;
 									return true;
 								//Esquerda vazia
-								}else if(coluna<0 
-										&& (tab.getPeca(linhaIni, colunaIni-1) == null)
-										&&((tab.getPeca(linhaIni, colunaIni-2) == null)
-										&&(tab.getPeca(linhaIni, colunaIni-3) == null))) {
-									tab.setPeca(linhaIni, colunaIni-2, this);
-									tab.setPeca(linhaIni, colunaIni, null);
-									tab.setPeca(linhaIni, colunaIni-1, rook);
-									tab.setPeca(linhaFim, colunaFim, null);
-									this.primMov = false;
+								}else if(column<0 
+										&& (board.getPiece(initialrow, initialColumn-1) == null)
+										&&((board.getPiece(initialrow, initialColumn-2) == null)
+										&&(board.getPiece(initialrow, initialColumn-3) == null))) {
+									board.setPiece(initialrow, initialColumn-2, this);
+									board.setPiece(initialrow, initialColumn, null);
+									board.setPiece(initialrow, initialColumn-1, rook);
+									board.setPiece(lastrow, lastColumn, null);
+									this.firstMove = false;
 									return true;
 								}
 							}

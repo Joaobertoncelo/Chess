@@ -4,109 +4,109 @@ public class Pawn extends Piece{
 	
 	
 	//Construtor
-	public Pawn(int cor){
-       super(cor);
+	public Pawn(int pieceColor){
+       super(pieceColor);
 	}
 	
 	public String toString() {
-		if(cor == 1) {
+		if(pieceColor == 1) {
 			return "White Pawn";
 		}else {
 			return "Black Pawn";
 		}
 	}
 	
-	public Boolean andar(int colunaIni, int linhaIni, int colunaFim, int linhaFim, Board tab) {
+	public Boolean move(int initialColumn, int initialrow, int lastColumn, int lastrow, Board board) {
 
 		try {
-			if(this.conferePos(colunaFim, linhaFim)) {
-				Piece pec = tab.getPeca(linhaFim, colunaFim);
-				int linha = linhaFim - linhaIni;
-				int coluna = colunaFim - colunaIni;
-				if(Math.abs(linha) == 1 && Math.abs(coluna) == 0 && pec == null) {
-					if(cor == 1 && (linhaFim > linhaIni)) {
-						tab.setPeca(linhaFim, colunaFim, this);
-						tab.setPeca(linhaIni, colunaIni, null);
-						this.primMov = false;
+			if(this.checkPosition(lastColumn, lastrow)) {
+				Piece piece = board.getPiece(lastrow, lastColumn);
+				int row = lastrow - initialrow;
+				int column = lastColumn - initialColumn;
+				if(Math.abs(row) == 1 && Math.abs(column) == 0 && piece == null) {
+					if(pieceColor == 1 && (lastrow > initialrow)) {
+						board.setPiece(lastrow, lastColumn, this);
+						board.setPiece(initialrow, initialColumn, null);
+						this.firstMove = false;
 						return true;
-					}else if(cor == 2 && (linhaFim < linhaIni)){
-						tab.setPeca(linhaFim, colunaFim, this);
-						tab.setPeca(linhaIni, colunaIni, null);
-						this.primMov = false;
+					}else if(pieceColor == 2 && (lastrow < initialrow)){
+						board.setPiece(lastrow, lastColumn, this);
+						board.setPiece(initialrow, initialColumn, null);
+						this.firstMove = false;
 						return true;
 					}else {
 						return false;
 					}
 				}
-				if (((Math.abs(coluna) == 1))&&(Math.abs(linha) == 1)) {
+				if (((Math.abs(column) == 1))&&(Math.abs(row) == 1)) {
 					//en Passant
-					if((colunaIni+1)<8 || (colunaIni-1)>8) {
-						int lPawn = colunaIni-1;
-						Piece left = tab.getPeca(linhaIni, lPawn);
-						int rPawn = colunaIni+1;
-						Piece right = tab.getPeca(linhaIni, rPawn);
-						if(cor == 1) {
-							if(((left instanceof Pawn)&&(tab.getBEnPassant())&&colunaFim<colunaIni)) {
-								tab.setPeca(linhaIni, colunaIni-1, null);
-								tab.setPeca(linhaFim, colunaFim, null);
-								tab.setPeca(linhaFim, colunaFim, this);
-								tab.setPeca(linhaIni, colunaIni, null);
-								this.primMov = false;
+					if((initialColumn+1)<8 || (initialColumn-1)>8) {
+						int leftPawn = initialColumn-1;
+						Piece left = board.getPiece(initialrow, leftPawn);
+						int rightPawn = initialColumn+1;
+						Piece right = board.getPiece(initialrow, rightPawn);
+						if(pieceColor == 1) {
+							if(((left instanceof Pawn)&&(board.getBlackEnPassant())&&lastColumn<initialColumn)) {
+								board.setPiece(initialrow, initialColumn-1, null);
+								board.setPiece(lastrow, lastColumn, null);
+								board.setPiece(lastrow, lastColumn, this);
+								board.setPiece(initialrow, initialColumn, null);
+								this.firstMove = false;
 								return true;
-							}else if((right instanceof Pawn)&&(tab.getBEnPassant()&&colunaFim>colunaIni)) {
-								tab.setPeca(linhaIni, colunaIni+1, null);
-								tab.setPeca(linhaFim, colunaFim, null);
-								tab.setPeca(linhaFim, colunaFim, this);
-								tab.setPeca(linhaIni, colunaIni, null);
-								this.primMov = false;
+							}else if((right instanceof Pawn)&&(board.getBlackEnPassant()&&lastColumn>initialColumn)) {
+								board.setPiece(initialrow, initialColumn+1, null);
+								board.setPiece(lastrow, lastColumn, null);
+								board.setPiece(lastrow, lastColumn, this);
+								board.setPiece(initialrow, initialColumn, null);
+								this.firstMove = false;
 								return true;
 							}
-						}else if (cor == 2) {
-							if((left instanceof Pawn)&&(tab.getWEnPassant()&&colunaFim<colunaIni)) {
-								tab.setPeca(linhaIni, colunaIni-1, null);
-								tab.setPeca(linhaFim, colunaFim, null);
-								tab.setPeca(linhaFim, colunaFim, this);
-								tab.setPeca(linhaIni, colunaIni, null);
-								this.primMov = false;
+						}else if (pieceColor == 2) {
+							if((left instanceof Pawn)&&(board.getWhiteEnPassant()&&lastColumn<initialColumn)) {
+								board.setPiece(initialrow, initialColumn-1, null);
+								board.setPiece(lastrow, lastColumn, null);
+								board.setPiece(lastrow, lastColumn, this);
+								board.setPiece(initialrow, initialColumn, null);
+								this.firstMove = false;
 								return true;
-							}else if((right instanceof Pawn)&&(tab.getWEnPassant()&&colunaFim>colunaIni)) {
-								tab.setPeca(linhaIni, colunaIni+1, null);
-								tab.setPeca(linhaFim, colunaFim, null);
-								tab.setPeca(linhaFim, colunaFim, this);
-								tab.setPeca(linhaIni, colunaIni, null);
-								this.primMov = false;
+							}else if((right instanceof Pawn)&&(board.getWhiteEnPassant()&&lastColumn>initialColumn)) {
+								board.setPiece(initialrow, initialColumn+1, null);
+								board.setPiece(lastrow, lastColumn, null);
+								board.setPiece(lastrow, lastColumn, this);
+								board.setPiece(initialrow, initialColumn, null);
+								this.firstMove = false;
 								return true;
 							}
 						}
 					}
 					//Captura Peça
-					if(pec != null) {
-						if(cor == 1 && linha > 0) {
-							tab.setPeca(linhaFim, colunaFim, null);
-							tab.setPeca(linhaFim, colunaFim, this);
-							tab.setPeca(linhaIni, colunaIni, null);
-							this.primMov = false;
+					if(piece != null) {
+						if(pieceColor == 1 && row > 0) {
+							board.setPiece(lastrow, lastColumn, null);
+							board.setPiece(lastrow, lastColumn, this);
+							board.setPiece(initialrow, initialColumn, null);
+							this.firstMove = false;
 							return true;
-						}else if(cor == 2 && linha < 0){
-							tab.setPeca(linhaFim, colunaFim, null);
-							tab.setPeca(linhaFim, colunaFim, this);
-							tab.setPeca(linhaIni, colunaIni, null);
-							this.primMov = false;
+						}else if(pieceColor == 2 && row < 0){
+							board.setPiece(lastrow, lastColumn, null);
+							board.setPiece(lastrow, lastColumn, this);
+							board.setPiece(initialrow, initialColumn, null);
+							this.firstMove = false;
 							return true;
 						}else {
 							return false;
 						}
 					}
 				}
-				//Primeiro movimento pode andar duas casas
-				if((this.primMov == true) && (Math.abs(coluna) == 0 && Math.abs(linha) == 2)) {
-					tab.setPeca(linhaFim, colunaFim, this);
-					tab.setPeca(linhaIni, colunaIni, null);
-					this.primMov = false;
-					if(cor == 1) {
-						tab.setWEnPassant(true);
-					}else if(cor ==2) {
-						tab.setBEnPassant(true);
+				//Primeiro movimento pode move duas casas
+				if((this.firstMove == true) && (Math.abs(column) == 0 && Math.abs(row) == 2)) {
+					board.setPiece(lastrow, lastColumn, this);
+					board.setPiece(initialrow, initialColumn, null);
+					this.firstMove = false;
+					if(pieceColor == 1) {
+						board.setWhiteEnPassant(true);
+					}else if(pieceColor ==2) {
+						board.setBlackEnPassant(true);
 					}
 					return true;
 				}
@@ -118,19 +118,19 @@ public class Pawn extends Piece{
 		return false;
 	} 
 	
-	public Piece promover(String peca, int linha, int coluna, int cor) {
-		if(peca == "Dama") {
-			Queen dama = new Queen(cor);
-	        return dama;
-		}else if(peca == "Bispo") {
-			Piece bispo = new Bishop(cor);
-	        return bispo;
-		}else if(peca == "Cavalo") {
-			Piece cavalo = new Horse(cor);
-	        return cavalo;
-		}else if(peca == "Torre") {
-			Piece torre = new Rook(cor);
-	        return torre;
+	public Piece promote(String piece, int row, int column, int pieceColor) {
+		if(piece == "Queen") {
+			Queen queen = new Queen(pieceColor);
+	        return queen;
+		}else if(piece == "Bishop") {
+			Piece bishop = new Bishop(pieceColor);
+	        return bishop;
+		}else if(piece == "Knight") {
+			Piece knight = new Knight(pieceColor);
+	        return knight;
+		}else if(piece == "Rook") {
+			Piece rook = new Rook(pieceColor);
+	        return rook;
 		}
 		return null;
 	}

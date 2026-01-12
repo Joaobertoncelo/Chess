@@ -3,65 +3,65 @@ package model;
 public class Rook extends Piece{
 	
 	//Construtor
-	public Rook(int cor){
-	    super(cor);
+	public Rook(int pieceColor){
+	    super(pieceColor);
 	}
 	
 	public String toString() {
-		if(cor == 1) {
+		if(pieceColor == 1) {
 			return "White Rook";
 		}else {
 			return "Black Rook";
 		}
 	}
 	
-	public Boolean andar(int colunaIni, int linhaIni, int colunaFim, int linhaFim, Board tab) {
+	public Boolean move(int initialColumn, int initialrow, int lastColumn, int lastrow, Board board) {
 		try {
-			if(this.conferePos(colunaFim, linhaFim)) {
-				Piece pec = tab.getPeca(linhaFim, colunaFim);
-				if ((pec == null)||(this.cor != pec.cor)) {
+			if(this.checkPosition(lastColumn, lastrow)) {
+				Piece piece = board.getPiece(lastrow, lastColumn);
+				if ((piece == null)||(this.pieceColor != piece.pieceColor)) {
 					int i;
-					int linha = linhaFim - linhaIni;
-					int coluna = colunaFim - colunaIni;
-					//Andar na horizontal
-					if((Math.abs(linha) == 0 && Math.abs(coluna) != 0)) {
-						if(colunaFim > colunaIni) {
-							for(i=colunaIni+1; i<colunaFim; i++) {
-								if(tab.getPeca(linhaIni, i) != null) {
+					int row = lastrow - initialrow;
+					int column = lastColumn - initialColumn;
+					//move na horizontal
+					if((Math.abs(row) == 0 && Math.abs(column) != 0)) {
+						if(lastColumn > initialColumn) {
+							for(i=initialColumn+1; i<lastColumn; i++) {
+								if(board.getPiece(initialrow, i) != null) {
 									return false;
 								}
 							}
 						}else {
-							for(i=colunaIni-1; i>colunaFim; i--) {
-								if(tab.getPeca(linhaIni, i) != null) {
+							for(i=initialColumn-1; i>lastColumn; i--) {
+								if(board.getPiece(initialrow, i) != null) {
 									return false;
 								}
 							}
 						}
-						tab.setPeca(linhaFim, colunaFim, null);
-						tab.setPeca(linhaFim, colunaFim, this);
-						tab.setPeca(linhaIni, colunaIni, null);
-						this.primMov = false;
+						board.setPiece(lastrow, lastColumn, null);
+						board.setPiece(lastrow, lastColumn, this);
+						board.setPiece(initialrow, initialColumn, null);
+						this.firstMove = false;
 						return true;
-					//Andar na vertical
-					}else if((Math.abs(linha) != 0 && Math.abs(coluna) == 0)){
-						if(linhaFim > linhaIni) {
-							for(i=linhaIni+1; i<linhaFim; i++) {
-								if(tab.getPeca(i, colunaIni) != null) {
+					//move na vertical
+					}else if((Math.abs(row) != 0 && Math.abs(column) == 0)){
+						if(lastrow > initialrow) {
+							for(i=initialrow+1; i<lastrow; i++) {
+								if(board.getPiece(i, initialColumn) != null) {
 									return false;
 								}
 							}
 						}else {
-							for(i=linhaIni-1; i>linhaFim; i--) {
-								if(tab.getPeca(i, colunaIni) != null) {
+							for(i=initialrow-1; i>lastrow; i--) {
+								if(board.getPiece(i, initialColumn) != null) {
 									return false;
 								}
 							}
 						}
-						tab.setPeca(linhaFim, colunaFim, null);
-						tab.setPeca(linhaFim, colunaFim, this);
-						tab.setPeca(linhaIni, colunaIni, null);
-						this.primMov = false;
+						board.setPiece(lastrow, lastColumn, null);
+						board.setPiece(lastrow, lastColumn, this);
+						board.setPiece(initialrow, initialColumn, null);
+						this.firstMove = false;
 						return true;
 					}
 				}

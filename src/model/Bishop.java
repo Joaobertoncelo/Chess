@@ -4,62 +4,62 @@ public class Bishop extends Piece{
 	
 	
 	//Construtor
-	public Bishop(int cor) {
-		super(cor);
+	public Bishop(int pieceColor) {
+		super(pieceColor);
 	}
 	
 	public String toString() {
-		if(cor == 1) {
+		if(pieceColor == 1) {
 			return "White Bishop";
 		}else {
 			return "Black Bishop";
 		}
 	}
 	
-	public Boolean andar(int colunaIni, int linhaIni, int colunaFim, int linhaFim, Board tab) {
+	public Boolean move(int initialColumn, int initialrow, int lastColumn, int lastrow, Board board) {
 		try{
-			if(this.conferePos(colunaFim, linhaFim)) {
-				Piece pec = tab.getPeca(linhaFim, colunaFim);
-				if (pec == null||(this.cor != pec.cor)) {
+			if(this.checkPosition(lastColumn, lastrow)) {
+				Piece pec = board.getPiece(lastrow, lastColumn);
+				if (pec == null||(this.pieceColor != pec.pieceColor)) {
 					int i, j;
-					int linha = linhaFim - linhaIni;
-					int coluna = colunaFim - colunaIni;
-					if(Math.abs(linha) == Math.abs(coluna)) {
-						if(linhaFim > linhaIni && colunaFim > colunaIni) {
-							j=colunaIni+1;
-							for(i=linhaIni+1; i<linhaFim; i++) {
-								if(tab.getPeca(i, j) != null) {
+					int row = lastrow - initialrow;
+					int column = lastColumn - initialColumn;
+					if(Math.abs(row) == Math.abs(column)) {
+						if(lastrow > initialrow && lastColumn > initialColumn) {
+							j=initialColumn+1;
+							for(i=initialrow+1; i<lastrow; i++) {
+								if(board.getPiece(i, j) != null) {
 									return false;
 								}
 								j++;
 							}
-						}else if(linhaFim < linhaIni && colunaFim < colunaIni){
-							j=colunaIni-1;
-							for(i=linhaIni-1; i>linhaFim; i--) {
-								if(tab.getPeca(i, j) != null) {
+						}else if(lastrow < initialrow && lastColumn < initialColumn){
+							j=initialColumn-1;
+							for(i=initialrow-1; i>lastrow; i--) {
+								if(board.getPiece(i, j) != null) {
 									return false;
 								}
 								j--;
 							}
-						}else if(linhaFim < linhaIni && colunaFim > colunaIni) {
-							j=colunaIni+1;
-							for(i=linhaIni-1; i>linhaFim; i--) {
-								if(tab.getPeca(i, j) != null) {
+						}else if(lastrow < initialrow && lastColumn > initialColumn) {
+							j=initialColumn+1;
+							for(i=initialrow-1; i>lastrow; i--) {
+								if(board.getPiece(i, j) != null) {
 									return false;
 								}
 								j++;
 							}
-						}else if(linhaFim > linhaIni && colunaFim < colunaIni){
-							j=colunaIni-1;
-							for(i=linhaIni+1; i<linhaFim; i++) {
-								if(tab.getPeca(i, j) != null) {
+						}else if(lastrow > initialrow && lastColumn < initialColumn){
+							j=initialColumn-1;
+							for(i=initialrow+1; i<lastrow; i++) {
+								if(board.getPiece(i, j) != null) {
 									return false;
 								}
 								j--;
 							}
 						}
-						tab.setPeca(linhaFim, colunaFim, this);
-						tab.setPeca(linhaIni, colunaIni, null);
+						board.setPiece(lastrow, lastColumn, this);
+						board.setPiece(initialrow, initialColumn, null);
 						return true;
 					}
 				}

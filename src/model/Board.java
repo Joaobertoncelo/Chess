@@ -1,102 +1,23 @@
 package model;
 
 public class Board {
-	private Boolean BEnPassant = false;
-	private Boolean WEnPassant = false;
-	private Piece[][] tabuleiro;
+	private Boolean BlackEnPassant = false;
+	private Boolean WhiteEnPassant = false;
+	private Piece[][] fullBoard;
     
     
   //Construtor
     public Board() {
-        this.tabuleiro = new Piece[8][8];
-        
-        //Cria Rei
-        Piece rei = new King(1);
-        tabuleiro[0][4] = rei;
-        rei = new King(2);
-        tabuleiro[7][4] = rei;
-        
-        //Cria Dama
-        Piece dama = new Queen(1);
-        tabuleiro[0][3] = dama;
-        dama = new Queen(2);
-        tabuleiro[7][3] = dama;
-        
-        //Cria Bispo
-        Piece bispo = new Bishop(1);
-        tabuleiro[0][2] = bispo;
-        bispo = new Bishop(1);
-        tabuleiro[0][5] = bispo;
-        bispo = new Bishop(2);
-        tabuleiro[7][2] = bispo;
-        bispo = new Bishop(2);
-        tabuleiro[7][5] = bispo;
-        
-        //Cria Cavalo
-        Piece cavalo = new Horse(1);
-        tabuleiro[0][1] = cavalo;
-        cavalo = new Horse(1);
-        tabuleiro[0][6] = cavalo;
-        cavalo = new Horse(2);
-        tabuleiro[7][1] = cavalo;
-        cavalo = new Horse(2);
-        tabuleiro[7][6] = cavalo;
-        
-        //Cria Torre
-        Piece torre = new Rook(1);
-        tabuleiro[0][0] = torre;
-        torre = new Rook(1);
-        tabuleiro[0][7] = torre;
-        torre = new Rook(2);
-        tabuleiro[7][0] = torre;
-        torre = new Rook(2);
-        tabuleiro[7][7] = torre;
-        
-        //Cria Peão
-        Piece peao = new Pawn(1);
-        tabuleiro[1][0] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][1] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][2] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][3] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][4] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][5] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][6] = peao;
-        peao = new Pawn(1);
-        tabuleiro[1][7] = peao;
-        
-        peao = new Pawn(2);
-        tabuleiro[6][0] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][1] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][2] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][3] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][4] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][5] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][6] = peao;
-        peao = new Pawn(2);
-        tabuleiro[6][7] = peao;
-        
-        
-        
+        this.fullBoard = new Piece[8][8];
+        placePieces();
     }
     public String toString(){
     	String string = new String();
     	for(int i=0; i<8;i++) {
     		for(int j=0; j<8;j++) {
-    			Piece p = tabuleiro[i][j];
-    			if (p != null) {
-    				System.out.print(p.toString() + " ");
+    			Piece piece = fullBoard[i][j];
+    			if (piece != null) {
+    				System.out.print(piece.toString() + " ");
     			}else {
     				System.out.print("- ");
     			}
@@ -105,28 +26,62 @@ public class Board {
     	}
     	return string;
     }
+
+    private void placePieces() {
+      // Place kings
+      fullBoard[0][4] = new King(1);
+      fullBoard[7][4] = new King(2);
+  
+      // Place queens
+      fullBoard[0][3] = new Queen(1);
+      fullBoard[7][3] = new Queen(2);
+  
+      // Place bishops
+      fullBoard[0][2] = new Bishop(1);
+      fullBoard[0][5] = new Bishop(1);
+      fullBoard[7][2] = new Bishop(2);
+      fullBoard[7][5] = new Bishop(2);
+  
+      // Place knights
+      fullBoard[0][1] = new Knight(1);
+      fullBoard[0][6] = new Knight(1);
+      fullBoard[7][1] = new Knight(2);
+      fullBoard[7][6] = new Knight(2);
+  
+      // Place rooks
+      fullBoard[0][0] = new Rook(1);
+      fullBoard[0][7] = new Rook(1);
+      fullBoard[7][0] = new Rook(2);
+      fullBoard[7][7] = new Rook(2);
+  
+      // Place pawns
+      for (int i = 0; i < 8; i++) {
+          fullBoard[1][i] = new Pawn(1);
+          fullBoard[6][i] = new Pawn(2);
+      }
+  }
     
-    public Piece getPeca(int linha, int coluna){
-    	return tabuleiro[linha][coluna];
+    public Piece getPiece(int row, int column){
+    	return fullBoard[row][column];
     }
     
-    public void setPeca(int linha, int coluna, Piece p) {
-    	tabuleiro[linha][coluna] = p;
+    public void setPiece(int row, int column, Piece p) {
+    	fullBoard[row][column] = p;
     }
     
-    public Boolean getBEnPassant() {
-		return BEnPassant;
+    public Boolean getBlackEnPassant() {
+		return BlackEnPassant;
 	}
 	
-	public void setBEnPassant(Boolean enPassant) {
-		this.BEnPassant = enPassant;
+	public void setBlackEnPassant(Boolean enPassant) {
+		this.BlackEnPassant = enPassant;
 	}
 	
-	public Boolean getWEnPassant() {
-		return WEnPassant;
+	public Boolean getWhiteEnPassant() {
+		return WhiteEnPassant;
 	}
 	
-	public void setWEnPassant(Boolean enPassant) {
-		this.WEnPassant = enPassant;
+	public void setWhiteEnPassant(Boolean enPassant) {
+		this.WhiteEnPassant = enPassant;
 	}
 }
